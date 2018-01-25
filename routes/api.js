@@ -7,4 +7,5 @@ module.exports = function (app) {
     app.get('/login', authController.login);  
     app.get('/callback', authController.callback);  
     app.get('/refresh_token', authController.refresh_token);  
+    app.get('/rate', ratingController.getPlaylist);
   }

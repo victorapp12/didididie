@@ -1,10 +1,4 @@
 module.exports = function (app) {
-    var request = require('request'); // "Request" library
-    var querystring = require('querystring');
-    var cookieParser = require('cookie-parser');
-    var client_id = '90e001358d1e4ffc9dbd814a1d458c9a'; // Your client id
-    var client_secret = 'd6f1a0404e1048ec8592ea8148641987'; // Your secret
-    var redirect_uri = 'http://localhost:8080/callback/'; // Your redirect uri
     /**
      * Generates a random string containing numbers and letters
      * @param  {number} length The length of the string
@@ -30,7 +24,7 @@ module.exports = function (app) {
             res.cookie(stateKey, state);
 
             // your application requests authorization
-            var scope = 'user-read-private user-read-email';
+            var scope = 'user-read-private user-read-email playlist-read-collaborative';
             res.redirect('https://accounts.spotify.com/authorize?' +
                 querystring.stringify({ response_type: 'code', client_id: client_id, scope: scope, redirect_uri: redirect_uri, state: state }));
         },
@@ -42,8 +36,7 @@ module.exports = function (app) {
             var code = req.query.code || null;
             var state = req.query.state || null;
             var storedState = req.cookies ? req.cookies[stateKey] : null;
-            console.log(state);
-            console.log(storedState);
+    
             if (state === null) {
                 res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }));
             } else {
@@ -76,6 +69,7 @@ module.exports = function (app) {
                         // use the access token to access the Spotify Web API
                         request.get(options, function (error, response, body) {
                             console.log(body);
+                            user = body;
                         });
 
                         // we can also pass the token to the browser to make requests from there

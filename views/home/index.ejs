@@ -140,16 +140,19 @@
                 }, false);
 
                 document.getElementById('obtain-playlist').addEventListener('click', function () {
-                    $.ajax({
-                        url: 'users/g54dj8ei8odx6q6xetozofe4f/playlists',
-                        success: function (err, resp) {
-                            if (err) {
-                                alert(err);
-                            }
-                            else {
-                                alert(resp);
-                            }
+                    var request = $.ajax({
+                        cache: false,
+                        url: "/rate",
+                        data: {
+                            'access_token': access_token
                         }
+                    });
+
+                    request.done(function (data) {
+                        console.log(data);
+                    });
+                    request.fail(function (jqXHR, textStatus) {
+                        console.log(textStatus);
                     });
                 })
             }
