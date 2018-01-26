@@ -31,7 +31,12 @@
             <div id="oauth">
             </div>
             <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
-            <button class="btn btn-default" id="obtain-playlist">Votar</button>
+            <button class="btn btn-default" id="update-playlist">Atualizar playlist</button>
+            <button class="btn btn-default" id="obtain-playlist">Carregar playlist</button>
+        </div>
+        <div>
+            <div id="classes">
+            </div>
         </div>
     </div>
 
@@ -139,6 +144,28 @@
                     });
                 }, false);
 
+                document.getElementById('update-playlist').addEventListener('click', function () {
+                    var request = $.ajax({
+                        cache: false,
+                        url: "/update",
+                        data: {
+                            'access_token': access_token
+                        }
+                    });
+
+                    request.done(function (data) {
+                        console.log(data.list);
+                        oauthPlaceholder.innerHTML = oauthTemplate({
+                            access_token: access_token,
+                            refresh_token: refresh_token
+                        });
+                    });
+                    request.fail(function (jqXHR, textStatus) {
+                        console.log(textStatus);
+                    });
+                });
+
+
                 document.getElementById('obtain-playlist').addEventListener('click', function () {
                     var request = $.ajax({
                         cache: false,
@@ -149,12 +176,12 @@
                     });
 
                     request.done(function (data) {
-                        console.log(data);
+                        window.location.assign('/rate');
                     });
                     request.fail(function (jqXHR, textStatus) {
                         console.log(textStatus);
                     });
-                })
+                });
             }
         })();
     </script>

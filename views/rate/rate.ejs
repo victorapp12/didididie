@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <title>Rate it</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Album
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Artist
+                </th>
+                <th>
+                    Rate
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% list.forEach(function(track, index){ %>
+                <tr>
+                    <td>
+                        <img src='<%- track.track_image %>' width="100xp" height="100px" />
+                    </td>
+                    <td>
+                        <%- track.track_name %>
+                    </td>
+                    <td>
+                        <%- track.track_artist %>
+                    </td>
+                    <td>
+                        <button>
+                            <img src="images/thumb-up.png" width="20dp" height="20dp">
+                        </button>
+                        <button>
+                                <img src="images/thumb-down.png" width="20dp" height="20dp">
+                        </button>
+                    </td>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+</body>
+
+</html>
+
+<!-- track_id: { type: String, unique: true, riquered: true },
+track_name: { type: String, required: false },
+track_artist: { type: String, riquered: true },
+track_image: { type: String, required: true },
+track_add_by: { type: String, required: false },
+track_like: { type: Number, required: true },
+track_dislike: { type: Number, required: true } -->
