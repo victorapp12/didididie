@@ -1,9 +1,7 @@
 module.exports = function (app) {
-    /**
-     * Generates a random string containing numbers and letters
-     * @param  {number} length The length of the string
-     * @return {string} The generated string
-     */
+
+    var user_logged = app.models.user;
+
     var generateRandomString = function (length) {
         var text = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -36,7 +34,7 @@ module.exports = function (app) {
             var code = req.query.code || null;
             var state = req.query.state || null;
             var storedState = req.cookies ? req.cookies[stateKey] : null;
-    
+
             if (state === null) {
                 res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }));
             } else {
@@ -68,6 +66,35 @@ module.exports = function (app) {
 
                         // use the access token to access the Spotify Web API
                         request.get(options, function (error, response, body) {
+                            var user_object = new Object();
+                            user_object.user_id = body.id;
+                            user_object.user_display_name = body.display_name;
+                            user_object.user_email = body.email;
+
+                            user_logged.findOne({ user_id: body.id },
+                                function (error, user_response) {
+                                    try {
+                                        if (error) {
+                                            console.log("Error - track - step 1 " + error);
+                                        }
+                                        else if (user_response == null) {
+                                            //Nao existe esse track
+                                            user_logged.create(user_object, function (error, user_esponse) {
+                                                if (error) {
+                                                    console.log("Error - track - step 2 " + error);
+                                                }
+                                                else {
+                                                    console.log("Usuario criado");
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            console.log("Usuario existe");
+                                        }
+                                    } catch (e) {
+                                        console.log("db error");
+                                    }
+                                });
                             console.log(body);
                             user = body;
                         });

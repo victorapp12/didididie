@@ -85,6 +85,7 @@
                 }
                 return hashParams;
             }
+            var user;
 
             var userProfileSource = document.getElementById('user-profile-template').innerHTML,
                 userProfileTemplate = Handlebars.compile(userProfileSource),
@@ -118,7 +119,7 @@
                         },
                         success: function (response) {
                             userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-
+                            user = response;
                             $('#login').hide();
                             $('#loggedin').show();
                         }
@@ -167,11 +168,15 @@
 
 
                 document.getElementById('obtain-playlist').addEventListener('click', function () {
+                    
                     var request = $.ajax({
                         cache: false,
                         url: "/rate",
                         data: {
-                            'access_token': access_token
+                            'access_token': access_token,
+                            'user_id': user.id,
+                            'user_name': user.display_name,
+                            'user_email': user.email
                         }
                     });
 
