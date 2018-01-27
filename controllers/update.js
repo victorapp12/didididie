@@ -4,14 +4,18 @@ module.exports = function (app) {
     var track = app.models.track;
 
     var updateController = {
+
         getPlaylist: function (req, res) {
             var state = generateRandomString(16);
             // your application requests authorization
             var list = null;
             var access_token = req.query.access_token;
-            var user_id = user.id;
+            console.log("ID");
+            console.log(user_logged_id);
+            console.log("Session");
+            console.log(req.session); 
             var options = {
-                url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/',
+                url: 'https://api.spotify.com/v1/users/' + user_logged_id + '/playlists/',
                 headers: {
                     'Authorization': 'Bearer ' + access_token
                 },
@@ -26,8 +30,8 @@ module.exports = function (app) {
                         playlists.list_name = body.items[i].name;
                         playlists.list_owner = body.items[i].owner.display_name;
                         playlists.list_owner_id = body.items[i].owner.id;
+                        console.log(playlists.list_id + " - " + playlists.list_owner_id);
                     }
-                    console.log(playlists.list_id + " - " + playlists.list_owner_id);
                 }
 
                 var options = {
@@ -57,7 +61,7 @@ module.exports = function (app) {
                                     readNext(body);
                                 }
                                 else {
-                                    list = readTextFile(data, user.id);
+                                    list = readTextFile(data, user_logged_id);
                                     res.send({
                                         'list': list
                                     });
@@ -65,7 +69,7 @@ module.exports = function (app) {
                             });
                         }
                         else {
-                            list = readTextFile(data, user.id);
+                            list = readTextFile(data, user_logged_id);
                             res.send({
                                 'list': list
                             });
@@ -89,8 +93,6 @@ module.exports = function (app) {
     };
 
     function readTextFile(playlist, user_id) {
-        https://api.spotify.com/v1/users/{user_id}
-        console.log("Id: " + user_id);
         var data = new Array();
         var count = 0;
         for (var i = 0; i < playlist.length; i++) {
@@ -125,6 +127,7 @@ module.exports = function (app) {
                             track.create(trackObject[index], function (error, trackResponse) {
                                 if (error) {
                                     console.log("Error - track - step 2 " + error);
+                                    trackHandler(trackObject, ++index);
                                 }
                                 else {
                                     trackHandler(trackObject, ++index);

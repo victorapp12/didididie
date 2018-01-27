@@ -1,23 +1,24 @@
 
 var express = require('express'),
   load = require('express-load'),
-  app = express(),
   mongoose = require('mongoose'),
   bodyParser = require('body-parser'),
   helmet = require('helmet'),
   admin = require("firebase-admin"),
   assert = require('assert'),
-  request = require('request'), 
+  request = require('request'),
   querystring = require('querystring'),
-  cookieParser = require('cookie-parser');
+  cookieParser = require('cookie-parser'),
+  session = require('express-session'),
+  app = express();
 
+global.user_logged_id = null;
 global.dev = true;
 global.version = "1.0.0";
 global.database_link = "mongodb://localhost:27017/database";
 global.querystring = querystring;
 global.request = request;
 global.cookieParser = cookieParser;
-global.user = null;  
 global.client_id = '90e001358d1e4ffc9dbd814a1d458c9a'; // Your client id
 global.client_secret = 'd6f1a0404e1048ec8592ea8148641987'; // Your secret
 global.redirect_uri = 'http://localhost:8080/callback/'; // Your redirect uri
@@ -36,6 +37,12 @@ db.on('open', function () {
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser('didididie'));
+app.use(session({
+  secret: "Shh, its a secret!",
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());

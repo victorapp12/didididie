@@ -47,17 +47,56 @@
                         <%- track.track_artist %>
                     </td>
                     <td>
-                        <button>
-                            <img src="images/thumb-up.png" width="20dp" height="20dp">
-                        </button>
-                        <button>
+                        <form id="down" action="/rate" method="post">
+                            <input type="hidden" id="track_id" name="track_id" value="<%- track.track_id %>" />
+                            <input type="hidden" id="rate_value" name="rate_value" value="-1">
+                            <button type="submit">
                                 <img src="images/thumb-down.png" width="20dp" height="20dp">
-                        </button>
+                            </button>
+                        </form>
+                        <form id="up" action="/rate" method="post">
+                            <input type="hidden" id="track_id" name="track_id" value="<%- track.track_id %>">
+                            <input type="hidden" id="rate_value" name="rate_value" value="1">
+                            <button type="submit">
+                                <img src="images/thumb-up.png" width="20dp" height="20dp">
+                            </button>
+                        </form>
+
                     </td>
                 </tr>
                 <% }) %>
         </tbody>
     </table>
+    <script>
+        document.getElementById('up').addEventListener('submit', function (evt) {
+            
+            var request = $.ajax({
+                cache: false,
+                url: "/rate",
+                data: {
+                    'track_id':getElementById('track_id').value(),
+                    'rate_value':getElementById('rate_value').value()
+                }
+            });
+
+        });
+
+        document.getElementById('down').addEventListener('submit', function (evt) {
+            
+            var request = $.ajax({
+                cache: false,
+                url: "/rate",
+                data: {
+                    'track_id':getElementById('track_id').value(),
+                    'rate_value':getElementById('rate_value').value()
+                }
+            });
+            request.fail(function (jqXHR, textStatus) {
+                console.log(textStatus);
+            });
+
+        });
+    </script>
 </body>
 
 </html>

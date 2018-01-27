@@ -9,5 +9,6 @@ module.exports = function (app) {
     app.get('/callback', authController.callback);  
     app.get('/refresh_token', authController.refresh_token);  
     app.get('/update', updateController.getPlaylist);
-    app.get('/rate', ratingController.loadPlaylist);
+    app.get('/load_list', ratingController.loadPlaylist);
+    app.post('/rate', ratingController.rateTrack);
   }

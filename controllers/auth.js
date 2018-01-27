@@ -17,7 +17,6 @@ module.exports = function (app) {
     var authController = {
 
         login: function (req, res) {
-
             var state = generateRandomString(16);
             res.cookie(stateKey, state);
 
@@ -28,7 +27,6 @@ module.exports = function (app) {
         },
 
         callback: function (req, res) {
-
             // your application requests refresh and access tokens
             // after checking the state parameter
             var code = req.query.code || null;
@@ -70,7 +68,6 @@ module.exports = function (app) {
                             user_object.user_id = body.id;
                             user_object.user_display_name = body.display_name;
                             user_object.user_email = body.email;
-
                             user_logged.findOne({ user_id: body.id },
                                 function (error, user_response) {
                                     try {
@@ -78,7 +75,6 @@ module.exports = function (app) {
                                             console.log("Error - track - step 1 " + error);
                                         }
                                         else if (user_response == null) {
-                                            //Nao existe esse track
                                             user_logged.create(user_object, function (error, user_esponse) {
                                                 if (error) {
                                                     console.log("Error - track - step 2 " + error);
@@ -91,20 +87,22 @@ module.exports = function (app) {
                                         else {
                                             console.log("Usuario existe");
                                         }
+                                        console.log("sexao");
+                                        req.session.user = user_object;
+                                        console.log(req.session.user); 
+                                        global.user_logged_id = body.id;
+                                        console.log(user_logged_id);
+                                        // we can also pass the token to the browser to make requests from there
+                                        res.redirect('/#' +
+                                            querystring.stringify({
+                                                access_token: access_token,
+                                                refresh_token: refresh_token
+                                            }));
                                     } catch (e) {
                                         console.log("db error");
                                     }
                                 });
-                            console.log(body);
-                            user = body;
                         });
-
-                        // we can also pass the token to the browser to make requests from there
-                        res.redirect('/#' +
-                            querystring.stringify({
-                                access_token: access_token,
-                                refresh_token: refresh_token
-                            }));
                     } else {
                         res.redirect('/#' +
                             querystring.stringify({
