@@ -11,4 +11,5 @@ module.exports = function (app) {
     app.get('/update', updateController.getPlaylist);
     app.get('/load_list', ratingController.loadPlaylist);
     app.post('/rate', ratingController.rateTrack);
+    app.get('/teste', ratingController.teste);
   }

@@ -19,7 +19,7 @@ module.exports = function (app) {
         login: function (req, res) {
             var state = generateRandomString(16);
             res.cookie(stateKey, state);
-
+            console.log("WOW");
             // your application requests authorization
             var scope = 'user-read-private user-read-email playlist-read-collaborative';
             res.redirect('https://accounts.spotify.com/authorize?' +
@@ -32,10 +32,11 @@ module.exports = function (app) {
             var code = req.query.code || null;
             var state = req.query.state || null;
             var storedState = req.cookies ? req.cookies[stateKey] : null;
-
+            console.log("xxx");
             if (state === null) {
                 res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }));
             } else {
+                console.log("xxx");
                 res.clearCookie(stateKey);
                 var authOptions = {
                     url: 'https://accounts.spotify.com/api/token',
@@ -51,8 +52,9 @@ module.exports = function (app) {
                 };
 
                 request.post(authOptions, function (error, response, body) {
+                    console.log("xxx");
                     if (!error && response.statusCode === 200) {
-
+                        console.log("666");
                         var access_token = body.access_token,
                             refresh_token = body.refresh_token;
 
@@ -61,9 +63,12 @@ module.exports = function (app) {
                             headers: { 'Authorization': 'Bearer ' + access_token },
                             json: true
                         };
+                        console.log(access_token);
+                        console.log(refresh_token);
 
                         // use the access token to access the Spotify Web API
                         request.get(options, function (error, response, body) {
+                            console.log(body);
                             var user_object = new Object();
                             user_object.user_id = body.id;
                             user_object.user_display_name = body.display_name;

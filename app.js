@@ -12,7 +12,6 @@ var express = require('express'),
   session = require('express-session'),
   app = express();
 
-global.user_logged_id = null;
 global.dev = true;
 global.version = "1.0.0";
 global.database_link = "mongodb://localhost:27017/database";
@@ -21,7 +20,7 @@ global.request = request;
 global.cookieParser = cookieParser;
 global.client_id = '90e001358d1e4ffc9dbd814a1d458c9a'; // Your client id
 global.client_secret = 'd6f1a0404e1048ec8592ea8148641987'; // Your secret
-global.redirect_uri = 'http://localhost:8080/callback/'; // Your redirect uri
+global.redirect_uri = 'http://127.0.0.1:8080/callback/'; // Your redirect uri
 
 var database = database_link;
 

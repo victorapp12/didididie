@@ -61,50 +61,19 @@
                                 <img src="images/thumb-up.png" width="20dp" height="20dp">
                             </button>
                         </form>
+                    </td>
+                    <td>
+                        <% track.track_rates.forEach(function(rate, index){ %>
+                            <% if(rate.rate_user_id == user_id ){ %>
+                                <span><%- rate.rate_value == 1 ?  'Gostei' : 'Não Gostei' %></span>
+                        <% }else{ %>
 
+                        <% }}) %>
                     </td>
                 </tr>
                 <% }) %>
         </tbody>
     </table>
-    <script>
-        document.getElementById('up').addEventListener('submit', function (evt) {
-            
-            var request = $.ajax({
-                cache: false,
-                url: "/rate",
-                data: {
-                    'track_id':getElementById('track_id').value(),
-                    'rate_value':getElementById('rate_value').value()
-                }
-            });
-
-        });
-
-        document.getElementById('down').addEventListener('submit', function (evt) {
-            
-            var request = $.ajax({
-                cache: false,
-                url: "/rate",
-                data: {
-                    'track_id':getElementById('track_id').value(),
-                    'rate_value':getElementById('rate_value').value()
-                }
-            });
-            request.fail(function (jqXHR, textStatus) {
-                console.log(textStatus);
-            });
-
-        });
-    </script>
 </body>
 
 </html>
-
-<!-- track_id: { type: String, unique: true, riquered: true },
-track_name: { type: String, required: false },
-track_artist: { type: String, riquered: true },
-track_image: { type: String, required: true },
-track_add_by: { type: String, required: false },
-track_like: { type: Number, required: true },
-track_dislike: { type: Number, required: true } -->

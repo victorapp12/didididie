@@ -7,13 +7,17 @@ module.exports = function (app) {
     var ratingController = {
 
         loadPlaylist: function (req, res) {
-            getPlayList(res);
+            getPlayList(req, res);
         },
 
         rateTrack: function (req, res) {
             console.log("Sesison");
             console.log(req.session);
             rateTrack(req, res, req.body);
+        },
+
+        teste: function(req, res){
+            res.send("wow");
         }
 
     }
@@ -45,27 +49,28 @@ module.exports = function (app) {
                                 }
                                 else {
                                     console.log("saved");
-                                    getPlayList(res);
+                                    sendPlayList(req, res);
                                 }
                             });
                         }
                         else {
-                            if (trackRateResponse.track_rates[0].rate_value == 1) {
-                                trackRateResponse.track_rates[0].rate_value = -1;
+                            if (trackRateResponse.track_rates[0].rate_value != body.rate_value) {
+                                trackRateResponse.track_rates[0].rate_value = body.rate_value
+                                trackRateResponse.save(function (error, trackRateResponse) {
+                                    if (error) {
+                                        console.log("Error - resave rate - step 2" + error);
+                                        res.send("Falhou");
+                                    }
+                                    else {
+                                        console.log("resaved");
+                                        sendPlayList(req, res);
+                                    }
+                                });
                             }
                             else {
-                                trackRateResponse.track_rates[0].rate_value = -1;
+                                console.log("Opiniao computada");
+                                sendPlayList(req, res);
                             }
-                            trackRateResponse.save(function (error, trackRateResponse) {
-                                if (error) {
-                                    console.log("Error - resave rate - step 2" + error);
-                                    res.send("Falhou");
-                                }
-                                else {
-                                    console.log("resaved");
-                                    getPlayList(res);
-                                }
-                            });
                         }
                     });
                 }
@@ -73,21 +78,24 @@ module.exports = function (app) {
         });
     }
 
-    function getPlayList(res) {
-        track.find({}).select({
-            track_id: 1,
-            track_name: 1,
-            track_artist: 1,
-            track_image: 1,
-            track_add_by: 1,
-            track_like: 1,
-            track_dislike: 1
-        }).exec(function (error, callback) {
+    function sendPlayList(req, res) {
+        track.find({}).select({}).exec(function (error, callback) {
             if (error) {
                 console.log("Error" + error);
             }
             else {
-                res.render('rate/rate', { 'list': callback });
+                res.render('rate/rate', { 'user_id': req.session.user.user_id, 'list': callback });
+            }
+        });
+    }
+
+    function getPlayList(req, res) {
+        track.find({}).select({}).exec(function (error, callback) {
+            if (error) {
+                console.log("Error" + error);
+            }
+            else {
+                res.render('rate/rate', { 'user_id': req.session.user.user_id, 'list': callback });
             }
         });
     }
