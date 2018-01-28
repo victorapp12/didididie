@@ -1,0 +1,149 @@
+<html>
+
+<head>
+    <title>teste</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <style>
+        tbody {
+            text-align: center;
+            background: #f1f1f1;
+            border-bottom-style: solid;
+        }
+        tr{
+            margin-top: 10px;
+            background: #003;
+            color: #FFF;
+            height: 20px;
+            text-align: center;
+        }
+        td{
+            padding: 10px;
+        }
+        .emoji{
+            background: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        Album
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Artist
+                    </th>
+                    <th>
+                         
+                    </th>
+                    <th>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        var listArray = Array();
+        $(document).ready(function () {
+            getPlayList();
+
+            function getPlayList() {
+                var request = $.ajax({
+                    cache: false,
+                    url: "/getteste"
+                });
+
+                request.done(function (result) {
+                    loadData(result);
+                });
+                request.fail(function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                });
+            }
+
+        });
+
+        function positive(id) {
+            console.log("positive");
+            console.log(listArray[id]);
+            var request = $.ajax({
+                cache: false,
+                url: "/rate",
+                type: 'POST',
+                data: {
+                    'track_id': listArray[id],
+                    'rate_value': 1
+                }
+            });
+
+            request.done(function (data) {
+                console.log(data);
+                loadData(data);
+            });
+            request.fail(function (jqXHR, textStatus) {
+                console.log(textStatus);
+            });
+        }
+
+        function negative(id) {
+            console.log("negative");
+            console.log(listArray[id]);
+            var request = $.ajax({
+                cache: false,
+                url: "/rate",
+                type: 'POST',
+                data: {
+                    'track_id': listArray[id],
+                    'rate_value': -1
+                }
+            });
+
+            request.done(function (data) {
+                console.log(data);
+                loadData(data);
+            });
+            request.fail(function (jqXHR, textStatus) {
+                console.log(textStatus);
+            });
+        }
+
+        function loadData(result) {
+            $('tbody').empty();
+            for (var i in result.list) {
+                // console.log(result.list[data].track_name);
+                listArray[i] = result.list[i].track_id;
+                $('tbody').
+                    append('<tr>').
+                    append('<td><img src="' + result.list[i].track_image + '" width="150px" height="150px"/></td>').
+                    append('<td>' + result.list[i].track_name + '</td>').
+                    append('<td>' + result.list[i].track_artist + '</td>').
+                    append("<td><button onclick='positive(" + i + ");'><img src='images/thumb-up.png' width='20dp' height='20dp'></button></td>").
+                    append("<td><button onclick='negative(" + i + ");'><img src='images/thumb-down.png' width='20dp' height='20dp'></button></td>");
+                if (result.list[i].track_rates != null) {
+                    for (var j in result.list[i].track_rates) {
+                        if (result.list[i].track_rates[j].rate_user_id == result.user_id) {
+                            console.log(result.list[i].track_rates[j].rate_value);
+                            if (result.list[i].track_rates[j].rate_value == 1)
+                                $('tbody').append("<td class='emoji'> <img src='images/smile.png' width='20dp' height='20dp'>Gostei</td>");
+                            else if (result.list[i].track_rates[j].rate_value == -1)
+                                $('tbody').append("<td class='emoji'><img src='images/disguted.png' width='20dp' height='20dp'> Não Gostei</td>");
+                        }
+                    }
+                }
+                $('tbody').append('</tr>');
+            }
+        }
+    </script>
+</body>
+
+</html>

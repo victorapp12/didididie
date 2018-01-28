@@ -26,6 +26,11 @@ module.exports = function (app) {
                 querystring.stringify({ response_type: 'code', client_id: client_id, scope: scope, redirect_uri: redirect_uri, state: state }));
         },
 
+        logout: function(req, res){
+            req.session.destroy();
+            res.redirect('/home/index');
+        },
+
         callback: function (req, res) {
             // your application requests refresh and access tokens
             // after checking the state parameter

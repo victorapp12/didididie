@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Example of the Authorization Code flow with Spotify</title>
+    <title>Didididie</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <style type="text/css">
         #login,
@@ -30,9 +30,10 @@
             </div>
             <div id="oauth">
             </div>
-            <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+            <!-- <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button> -->
             <button class="btn btn-default" id="update-playlist">Atualizar playlist</button>
-            <button class="btn btn-default" id="obtain-playlist">Carregar playlist</button>
+            <button class="btn btn-default" id="rate_button">Votar</button>
+            <button class="btn btn-default" id="exit_button">Sair</button>
         </div>
         <div>
             <div id="classes">
@@ -130,20 +131,20 @@
                     $('#loggedin').hide();
                 }
 
-                document.getElementById('obtain-new-token').addEventListener('click', function () {
-                    $.ajax({
-                        url: '/refresh_token',
-                        data: {
-                            'refresh_token': refresh_token
-                        }
-                    }).done(function (data) {
-                        access_token = data.access_token;
-                        oauthPlaceholder.innerHTML = oauthTemplate({
-                            access_token: access_token,
-                            refresh_token: refresh_token
-                        });
-                    });
-                }, false);
+                // document.getElementById('obtain-new-token').addEventListener('click', function () {
+                //     $.ajax({
+                //         url: '/refresh_token',
+                //         data: {
+                //             'refresh_token': refresh_token
+                //         }
+                //     }).done(function (data) {
+                //         access_token = data.access_token;
+                //         oauthPlaceholder.innerHTML = oauthTemplate({
+                //             access_token: access_token,
+                //             refresh_token: refresh_token
+                //         });
+                //     });
+                // }, false);
 
                 document.getElementById('update-playlist').addEventListener('click', function () {
                     var request = $.ajax({
@@ -155,11 +156,7 @@
                     });
 
                     request.done(function (data) {
-                        console.log(data.list);
-                        oauthPlaceholder.innerHTML = oauthTemplate({
-                            access_token: access_token,
-                            refresh_token: refresh_token
-                        });
+                        alert(data.status);
                     });
                     request.fail(function (jqXHR, textStatus) {
                         console.log(textStatus);
@@ -167,21 +164,52 @@
                 });
 
 
-                document.getElementById('obtain-playlist').addEventListener('click', function () {
+                // document.getElementById('obtain-playlist').addEventListener('click', function () {
+                    
+                //     var request = $.ajax({
+                //         cache: false,
+                //         url: "/load_list",
+                //         data: {
+                //             'access_token': access_token,
+                //             'user_id': user.id,
+                //             'user_name': user.display_name,
+                //             'user_email': user.email
+                //         }
+                //     });
+
+                //     request.done(function (data) {
+                //         window.location.assign('/load_list');
+                //     });
+                //     request.fail(function (jqXHR, textStatus) {
+                //         console.log(textStatus);
+                //     });
+                // });
+
+                document.getElementById('rate_button').addEventListener('click', function () {
                     
                     var request = $.ajax({
                         cache: false,
-                        url: "/load_list",
-                        data: {
-                            'access_token': access_token,
-                            'user_id': user.id,
-                            'user_name': user.display_name,
-                            'user_email': user.email
-                        }
+                        url: "/teste",
                     });
 
                     request.done(function (data) {
-                        window.location.assign('/load_list');
+                        window.location.assign('/teste');
+                    });
+                    request.fail(function (jqXHR, textStatus) {
+                        console.log(textStatus);
+                    });
+                });
+
+
+                document.getElementById('exit_button').addEventListener('click', function () {
+                    
+                    var request = $.ajax({
+                        cache: false,
+                        url: "/logout"
+                    });
+
+                    request.done(function (data) {
+                        window.location.assign('/');
                     });
                     request.fail(function (jqXHR, textStatus) {
                         console.log(textStatus);

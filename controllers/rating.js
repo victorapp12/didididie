@@ -16,8 +16,12 @@ module.exports = function (app) {
             rateTrack(req, res, req.body);
         },
 
-        teste: function(req, res){
-            res.send("wow");
+        teste: function (req, res) {
+            res.render('rate/rating');
+        },
+
+        getTeste: function (req, res) {
+            sendPlayList(req, res);
         }
 
     }
@@ -45,7 +49,7 @@ module.exports = function (app) {
                             trackResponse.save(function (error, trackResponse) {
                                 if (error) {
                                     console.log("Error - save rate - step 2" + error);
-                                    res.send("Falhou");
+                                    res.send("Falhou -1");
                                 }
                                 else {
                                     console.log("saved");
@@ -59,7 +63,7 @@ module.exports = function (app) {
                                 trackRateResponse.save(function (error, trackRateResponse) {
                                     if (error) {
                                         console.log("Error - resave rate - step 2" + error);
-                                        res.send("Falhou");
+                                        res.send("Falhou 2");
                                     }
                                     else {
                                         console.log("resaved");
@@ -74,6 +78,10 @@ module.exports = function (app) {
                         }
                     });
                 }
+                else {
+                    console.log("ops");
+                    res.send("ops");
+                }
             }
         });
     }
@@ -84,7 +92,7 @@ module.exports = function (app) {
                 console.log("Error" + error);
             }
             else {
-                res.render('rate/rate', { 'user_id': req.session.user.user_id, 'list': callback });
+                res.send({ 'user_id': req.session.user.user_id, 'list': callback });
             }
         });
     }

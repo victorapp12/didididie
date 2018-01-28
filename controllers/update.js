@@ -10,10 +10,6 @@ module.exports = function (app) {
             // your application requests authorization
             var list = null;
             var access_token = req.query.access_token;
-            console.log("ID");
-            console.log(user_logged_id);
-            console.log("Session");
-            console.log(req.session); 
             var options = {
                 url: 'https://api.spotify.com/v1/users/' + user_logged_id + '/playlists/',
                 headers: {
@@ -62,17 +58,13 @@ module.exports = function (app) {
                                 }
                                 else {
                                     list = readTextFile(data, user_logged_id);
-                                    res.send({
-                                        'list': list
-                                    });
+                                    res.send({'status':'Playlist Atualizada'});
                                 }
                             });
                         }
                         else {
                             list = readTextFile(data, user_logged_id);
-                            res.send({
-                                'list': list
-                            });
+                            res.send({'status':'Playlist Atualizada'});
                         }
                     }
                 });
