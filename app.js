@@ -20,7 +20,7 @@ global.request = request;
 global.cookieParser = cookieParser;
 global.client_id = '90e001358d1e4ffc9dbd814a1d458c9a'; // Your client id
 global.client_secret = 'd6f1a0404e1048ec8592ea8148641987'; // Your secret
-global.redirect_uri = 'https://safe-waters-83512.herokuapp.com/callback/'; // Your redirect uri
+global.redirect_uri = 'https://safe-waters-83512.herokuapp.com/callback'; // Your redirect uri
 
 var database = database_link;
 
