@@ -47,6 +47,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 load('models').then('controllers').then('routes').into(app);
 
-app.listen(8080, function () {
-  console.log("Listening to 8080");
+
+
+var port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", function() {
+  console.log("Listening on Port 3000");
 });
