@@ -15,7 +15,7 @@ var express = require('express'),
 var port = process.env.PORT || 8080;
 global.dev = true;
 global.version = "1.0.0";
-global.database_link = "mongodb://root:NlI9yy04Lp0TiiMl@cluster0-shard-00-00-95wkb.mongodb.net:27017,cluster0-shard-00-01-95wkb.mongodb.net:27017,cluster0-shard-00-02-95wkb.mongodb.net:27017/authSource=admin?replicaSet=Cluster0-shard-0&ssl=true";
+global.database_link = "mongodb://root:NlI9yy04Lp0TiiMl@cluster0-shard-00-00-95wkb.mongodb.net:27017,cluster0-shard-00-01-95wkb.mongodb.net:27017,cluster0-shard-00-02-95wkb.mongodb.net:27017/admin?replicaSet=Cluster0-shard-0&ssl=true";
 global.querystring = querystring;
 global.request = request;
 global.cookieParser = cookieParser;
