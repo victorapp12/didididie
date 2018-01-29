@@ -1,33 +1,35 @@
-<html>
+<% include ../header %>
 
-<head>
-    <title>teste</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
     <style>
-        tbody {
-            text-align: center;
-            background: #f1f1f1;
-            border-bottom-style: solid;
+        .app-fab--thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
         }
-        tr{
-            margin-top: 10px;
-            background: #003;
-            color: #FFF;
-            height: 20px;
-            text-align: center;
+
+        .app-fab--absolute {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
         }
-        td{
-            padding: 10px;
-        }
-        .emoji{
-            background: #FFF;
+
+        @media(min-width: 1024px) {
+            .app-fab--absolute {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
         }
     </style>
-</head>
-
-<body>
+    <a href="/">
+        <button class="mdc-fab material-icons app-fab--absolute" aria-label="back">
+            <span class="mdc-fab__icon">
+                home
+            </span>
+        </button>
+    </a>
     <div class="container">
         <table class="table table-condensed">
             <thead>
@@ -74,8 +76,6 @@
         });
 
         function positive(id) {
-            console.log("positive");
-            console.log(listArray[id]);
             var request = $.ajax({
                 cache: false,
                 url: "/rate",
@@ -87,7 +87,6 @@
             });
 
             request.done(function (data) {
-                console.log(data);
                 loadData(data);
             });
             request.fail(function (jqXHR, textStatus) {
@@ -96,8 +95,6 @@
         }
 
         function negative(id) {
-            console.log("negative");
-            console.log(listArray[id]);
             var request = $.ajax({
                 cache: false,
                 url: "/rate",
@@ -109,7 +106,6 @@
             });
 
             request.done(function (data) {
-                console.log(data);
                 loadData(data);
             });
             request.fail(function (jqXHR, textStatus) {
@@ -120,19 +116,17 @@
         function loadData(result) {
             $('tbody').empty();
             for (var i in result.list) {
-                // console.log(result.list[data].track_name);
                 listArray[i] = result.list[i].track_id;
                 $('tbody').
                     append('<tr>').
                     append('<td><img src="' + result.list[i].track_image + '" width="150px" height="150px"/></td>').
                     append('<td>' + result.list[i].track_name + '</td>').
                     append('<td>' + result.list[i].track_artist + '</td>').
-                    append("<td><button onclick='positive(" + i + ");'><img src='images/thumb-up.png' width='20dp' height='20dp'></button></td>").
-                    append("<td><button onclick='negative(" + i + ");'><img src='images/thumb-down.png' width='20dp' height='20dp'></button></td>");
+                    append("<td><button class='mdc-fab material-icons app-fab--thumb' aria-label='back' onclick='positive(" + i + ");'><span>thumb_up</span></button></td>").
+                    append("<td><button class='mdc-fab material-icons app-fab--thumb' aria-label='back' onclick='negative(" + i + ");'><span>thumb_down</span></button></td>");
                 if (result.list[i].track_rates != null) {
                     for (var j in result.list[i].track_rates) {
                         if (result.list[i].track_rates[j].rate_user_id == result.user_id) {
-                            console.log(result.list[i].track_rates[j].rate_value);
                             if (result.list[i].track_rates[j].rate_value == 1)
                                 $('tbody').append("<td class='emoji'> <img src='images/smile.png' width='20dp' height='20dp'>Gostei</td>");
                             else if (result.list[i].track_rates[j].rate_value == -1)

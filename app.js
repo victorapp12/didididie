@@ -12,6 +12,7 @@ var express = require('express'),
   session = require('express-session'),
   app = express();
 
+var port = process.env.PORT || 8080;
 global.dev = true;
 global.version = "1.0.0";
 global.database_link = "mongodb://root:NlI9yy04Lp0TiiMl@cluster0-shard-00-00-95wkb.mongodb.net:27017,cluster0-shard-00-01-95wkb.mongodb.net:27017,cluster0-shard-00-02-95wkb.mongodb.net:27017/authSource=admin?replicaSet=Cluster0-shard-0&ssl=false";
@@ -46,7 +47,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 load('models').then('controllers').then('routes').into(app);
-
 
 
 var port = process.env.PORT || 3000;
