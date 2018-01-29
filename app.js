@@ -14,7 +14,7 @@ var express = require('express'),
 
 global.dev = true;
 global.version = "1.0.0";
-global.database_link = "mongodb://localhost:27017/database";
+global.database_link = "mongodb://root:NlI9yy04Lp0TiiMl@cluster0-shard-00-00-95wkb.mongodb.net:27017,cluster0-shard-00-01-95wkb.mongodb.net:27017,cluster0-shard-00-02-95wkb.mongodb.net:27017/admin?replicaSet=Cluster0-shard-0&ssl=true";
 global.querystring = querystring;
 global.request = request;
 global.cookieParser = cookieParser;
@@ -50,6 +50,3 @@ load('models').then('controllers').then('routes').into(app);
 app.listen(8080, function () {
   console.log("Listening to 8080");
 });
-
-
-
