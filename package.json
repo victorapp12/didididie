@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@material/fab": "^0.29.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
